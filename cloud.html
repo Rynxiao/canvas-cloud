@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas模拟 cloud 云动画</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            background: #f1f1f1;
+        }
+        #cvs {
+            width: 300px;
+            height: 450px;
+            display: block;
+            margin: 100px auto;
+            background: rgba(52,176,235,0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cvs" width="300" height="450">
+        Your Browser don't support canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById("cvs"),
+            context = canvas.getContext("2d"),
+            start_points_x = [-300, -100, -200, -250],
+            control_points_x_1 = [-200, 0, -100, -150],
+            control_points_x_2 = [-100, 100, 0, -50],
+            control_points_x_3 = [100, 300, 200, 150],
+            control_points_x_4 = [200, 400, 300, 250],
+            end_points_x_1 = [0, 200, 100, 50],
+            end_points_x_2 = [300, 500, 400, 350],
+            seeds = [0.2, -0.5, 0.3, -0.3],
+            opacitys = [0.7, 0.5, 0.3, 0.2],
+            dangerous_points = [0, 300, -300];
+
+        function drawBezierLines() {
+            context.clearRect(0, 250, 300, 450);
+            for(var i = 0; i < seeds.length; i++) {
+                drawBezierCurveLine(start_points_x[i], control_points_x_1[i], control_points_x_2[i],
+                    control_points_x_3[i], control_points_x_4[i], end_points_x_1[i], end_points_x_2[i], opacitys[i]);
+            }
+        }
+
+        function drawBezierCurveLine(spx, cpx1, cpx2, cpx3, cpx4, epx1, epx2, opacity) {
+            context.strokeStyle = 'rgba(255,255,255,'+opacity+')';
+            context.fillStyle = 'rgba(255,255,255,'+opacity+')';
+            context.save();
+            context.beginPath();
+            context.moveTo(spx, 300);
+            context.bezierCurveTo(cpx1, 250, cpx2, 350, epx1, 300);
+            context.bezierCurveTo(cpx3, 250, cpx4, 350, epx2, 300);
+            context.lineTo(epx2, 450);
+            context.lineTo(spx, 450);
+            context.closePath();
+            context.restore();
+            context.stroke();
+            context.fill();
+        }
+
+        var drawInterval = setInterval(function() {
+            for(var i = 0; i < seeds.length; i++) {
+                var seed = seeds[i];
+                var start_point_x = start_points_x[i];
+                var end_point_x_1 = end_points_x_1[i];
+                var end_point_x_2 = end_points_x_2[i];
+
+                if(start_point_x >= (dangerous_points[0] - seed) || start_point_x <= (dangerous_points[2] - seed)) {
+                    seeds[i] = -seed;
+                }
+
+                start_points_x[i] += seed;
+                control_points_x_1[i] += seed;
+                control_points_x_2[i] += seed;
+                control_points_x_3[i] += seed;
+                control_points_x_4[i] += seed;
+                end_points_x_1[i] += seed;
+                end_points_x_2[i] += seed;
+            }
+
+            drawBezierLines();
+        }, 1000 / 60)
+    </script>
+</body>
+</html>
