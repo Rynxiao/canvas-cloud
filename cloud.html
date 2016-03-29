@@ -36,6 +36,7 @@
             opacitys = [0.7, 0.5, 0.3, 0.2],
             dangerous_points = [0, 300, -300];
 
+        // 画线操作
         function drawBezierLines() {
             context.clearRect(0, 250, 300, 450);
             for(var i = 0; i < seeds.length; i++) {
@@ -44,6 +45,7 @@
             }
         }
 
+        // 使用两条三次贝瑟尔曲线画出四段圆弧，模拟云的波浪效果
         function drawBezierCurveLine(spx, cpx1, cpx2, cpx3, cpx4, epx1, epx2, opacity) {
             context.strokeStyle = 'rgba(255,255,255,'+opacity+')';
             context.fillStyle = 'rgba(255,255,255,'+opacity+')';
@@ -60,6 +62,7 @@
             context.fill();
         }
 
+        // 每次定时器执行，执行画线操作，同时更新点位置
         var drawInterval = setInterval(function() {
             for(var i = 0; i < seeds.length; i++) {
                 var seed = seeds[i];
