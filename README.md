@@ -1,9 +1,9 @@
 # canvas 模拟云动画
 
+## 原理分析
+
 ## 执行效果
 ![effect](./effect.png)
-
-## 原理分析
 
 ## 额外补充
 ```javascript
